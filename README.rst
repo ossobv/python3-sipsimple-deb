@@ -40,3 +40,12 @@ Results:
 These packages can then be installed/uninstalled easily. (You may need
 to ``apt-get -f install`` to fix dependencies if you're installing them
 from the filesystem using ``dpkg -i``.)
+
+
+Examples
+--------
+
+See `<example.py>`_ for a very basic calling example. This example was
+taken from `saghul's sipsimple_hello_world.py
+<https://github.com/saghul/sipsimple-examples/blob/master/sipsimple_hello_world.py>`_
+and adapted so it works with python3-sipsimple.
