@@ -1,21 +1,22 @@
-python3-sipsimple-deb :: OSSO build of AG-Projects sipsimple packages
-=====================================================================
+python3-sipsimple-deb :: OSSO build of SIPSIMPLE
+================================================
 
-Getting working deb packages for *Ubuntu/Jammy* was not entirely
-trivial. The official repository had a broken release file [1].
+*AG Projects* has built `SIP SIMPLE <https://sipsimpleclient.org/>`_, an SDK to interface with *VoIP* devices.
 
-[1] https://ag-projects.com/ubuntu/dists/jammy/Release content is equal
-to the index view of the parent directory. (Last checked 2022-10-12.)
+Download and installation instructions are `here
+<http://download.ag-projects.com/SipSimpleSDK/Python3/>`_, but they are
+slightly outdated and do not work properly for *Ubuntu/Jammy*.
 
-Additionally, getting ``python3-sipsimple`` to work as simple package
-was less than trivial because of the mandatory ``python3-*``
-dependencies.
+For one, the `debian packages
+<https://ag-projects.com/ubuntu/dists/jammy/>`_ appeared to include
+*jammy*, but the ``Releases`` file was broken (returned the index
+itself). Further, the installation wasn't really clear on which
+dependencies are needed.
 
-This project builds ``python3-sipsimple*.deb`` and the appropriate
-dependencies for Ubuntu/Jammy.
-
-*AG-Projects sipsimple* already contains build scripts for *Debian*, so most
-of is (re)used verbatim.
+The ``python3-sipsimple-deb`` project is a way to consistently build
+``python3-sipsimple`` and the required dependencies in one go for Debian
+and Ubuntu platforms. It uses the *Debian* build scripts already included
+by *AG Projects* as much as possible.
 
 Usage::
 
@@ -28,13 +29,13 @@ Results:
     $ cd Dockerfile.out/jammy/python3-sipsimple_5.2.6+2+g1e60156a-0osso0+ubu22.04
 
     $ ls -1 *.deb
-    python3-application_3.0.3_all.deb
+    python3-application_3.0.4_all.deb
     python3-eventlib_0.3.0_all.deb
-    python3-gnutls_3.1.7_all.deb
+    python3-gnutls_3.1.10_all.deb
     python3-msrplib_0.21.1_all.deb
-    python3-otr_2.0.0_all.deb
+    python3-otr_2.0.1_all.deb
     python3-sipsimple_5.2.6+2+g1e60156a-0osso0+ubu22.04_amd64.deb
-    python3-xcaplib_2.0.0_all.deb
+    python3-xcaplib_2.0.1_all.deb
 
 These packages can then be installed/uninstalled easily. (You may need
 to ``apt-get -f install`` to fix dependencies if you're installing them

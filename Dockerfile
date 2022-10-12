@@ -108,9 +108,22 @@ RUN cd /build && \
         tags=$(cat "$project/tags") && \
         # Some projects (python3-xcaplib) have both release-X and X. Do
         # complicated stuff to get the latest of either.
-        # (Removing 0.8.11 because python3-eventlib has bad versions.)
-        latest=$(printf '%s\n' "$tags" | jq -r '.[].name' | sed -e 's/^release-//;/^[0-9]/!d;/^0[.]8[.]11/d' | sort -rV | head -n1) && \
+        case $project in \
+        python3-eventlib) \
+            # Removing 0.8.11 because it's older than 0.2.5 :(
+            latest=$(printf '%s\n' "$tags" | jq -r '.[].name' | sed -e 's/^release-//;/^[0-9]/!d;/^0[.]8[.]11/d' | sort -rV | head -n1);; \
+        python3-msrplib) \
+            # Someone forgot to push the 0.21.1 tag
+            latest=$({ printf '%s\n' "$tags" | jq -r '.[].name'; echo 0.21.1; } | \
+              sed -e 's/^release-//;/^[0-9]/!d' | sort -rV | head -n1);; \
+        *) \
+            latest=$(printf '%s\n' "$tags" | jq -r '.[].name' | sed -e 's/^release-//;/^[0-9]/!d' | sort -rV | head -n1);; \
+        esac && \
         tar=$(printf '%s\n' "$tags" | jq -r '.[] | select(.name == "'$latest'" or .name == "release-'$latest'") | .tarball_url') && \
+        if test -z "$tar"; then \
+            # Most files here are older, except python3-msrplib-0.21.1
+            tar=http://download.ag-projects.com/SipSimpleSDK/Python3/$project-$latest.tar.gz; \
+        fi && \
         filename="${project}-${latest}_orig.tar.gz" && \
         echo "latest: $latest -- source: $tar" && \
         curl -sSfLo "$project/$filename" "$tar" && \
